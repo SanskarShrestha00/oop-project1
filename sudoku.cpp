@@ -7,13 +7,11 @@ private:
 
 public:
     Sudoku(int initial_grid[SIZE][SIZE]) {
-        // Allocate memory for the grid
         grid = new int*[SIZE];
         for (int i = 0; i < SIZE; i++) {
             grid[i] = new int[SIZE];
         }
 
-        // Initialize the grid with the given initial values
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 grid[i][j] = initial_grid[i][j];
@@ -22,7 +20,6 @@ public:
     }
 
     ~Sudoku() {
-        // Deallocate the memory
         for (int i = 0; i < SIZE; i++) {
             delete[] grid[i];
         }
@@ -39,14 +36,12 @@ public:
     }
 
     bool isSafe(int row, int col, int num) {
-        // Check if 'num' is not in current row and current column
         for (int x = 0; x < SIZE; x++) {
             if (grid[row][x] == num || grid[x][col] == num) {
                 return false;
             }
         }
 
-        // Check if 'num' is not in current 2x3 sub-grid
         int startRow = row - row % 2, startCol = col - col % 3;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
@@ -73,7 +68,7 @@ public:
     bool solveSudoku() {
         int row, col;
         if (!findEmptyLocation(row, col)) {
-            return true; // success, no empty space left
+            return true;
         }
 
         for (int num = 1; num <= SIZE; num++) {
@@ -82,21 +77,21 @@ public:
                 if (solveSudoku()) {
                     return true;
                 }
-                grid[row][col] = 0; // failure, undo & try again
+                grid[row][col] = 0;
             }
         }
-        return false; // triggers backtracking
+        return false;
     }
 };
 
 int main() {
     int initial_grid[6][6] = {
-        {0, 0, 0, 1, 0, 4},
-        {0, 0, 6, 0, 0, 0},
-        {0, 1, 0, 0, 0, 0},
-        {0, 0, 0, 0, 5, 6},
+        {6, 0, 0, 4, 0, 5},
+        {1, 4, 5, 3, 0, 6},
+        {0, 2, 6, 1, 0, 0},
+        {0, 0, 1, 0, 6, 4},
         {0, 0, 0, 0, 0, 0},
-        {2, 0, 3, 5, 0, 0}
+        {5, 0, 0, 0, 3, 2}
     };
 
     Sudoku sudoku(initial_grid);
@@ -105,7 +100,7 @@ int main() {
         std::cout << "Solved Sudoku grid:" << std::endl;
         sudoku.printGrid();
     } else {
-        std::cout << "No solution exists for the given Sudoku grid." << std::endl;
+        std::cout << "No solution." << std::endl;
     }
 
     return 0;
